@@ -11,7 +11,10 @@ from commons.utils import process_missing_values, SMAPE
 from TFT_codes.processing import process
 from TFT_codes.tft import *
 
-from lightning.pytorch.loggers import TensorBoardLogger
+import tensorboard
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 CUR_PATH = 'data'
 TRAIN_DF_PATH = 'train.csv'
@@ -43,9 +46,9 @@ if __name__=='__main__':
             'MAX_ENCODER_LENGTH' : 256,
             'epoch' : 8,
             'gradient_clip_val': 0.9,
-            'hidden_size': 30, 
+            'hidden_size': 30, #180
             'dropout': 0.1,
-            'hidden_continuous_size': 15,
+            'hidden_continuous_size': 15, #90
             'attention_head_size': 4, 
             'learning_rate': 0.001,
     }

@@ -113,7 +113,7 @@ def fit(seed, tr_ds, va_loader=None, cur_loss=MAPE() ,PARAMS=None):
         attention_head_size=PARAMS['attention_head_size'],
         dropout=PARAMS['dropout'],
         hidden_continuous_size=PARAMS['hidden_continuous_size'],
-        output_size=[1],
+        output_size=1,
         loss=cur_loss,
         log_interval=10,  # log example every 10 batches
         logging_metrics=[MAPE()], #,myMAPE().to('cuda')],
@@ -198,8 +198,6 @@ def validation(model_path, train_df, test_df, PARAMS):
         model = TemporalFusionTransformer.load_from_checkpoint(model_path)
         predictions = model.predict(va_loader)
 
-        pred_df_plus = pd.DataFrame([])
-        temp = predictions.view(-1)
-        pred_df_plus[f"target"] = temp.cpu().detach().numpy()
+        temp = predictions.view(100,-1)
         
-        return pred_df_plus
+        return temp
