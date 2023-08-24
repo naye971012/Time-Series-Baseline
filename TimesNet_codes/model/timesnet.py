@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.fft
-from TimesNet_codes.embedding import DataEmbedding
-from TimesNet_codes.model_block import Inception_Block_V1
+from TimesNet_codes.model.embedding import DataEmbedding
+from TimesNet_codes.model.model_block import Inception_Block_V1
 
 
 def FFT_for_Period(x, k=2):

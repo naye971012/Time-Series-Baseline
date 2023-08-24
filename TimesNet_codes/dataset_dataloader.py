@@ -6,10 +6,40 @@ import re
 import torch
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import StandardScaler
-from sktime.datasets import load_from_tsfile_to_dataframe
 import warnings
-
 warnings.filterwarnings('ignore')
+
+from TimesNet_codes.model.time_features import time_features
+
+
+class CustomDataset(Dataset):
+    def __init__(self, data , size=None):
+        self.seq_len = size[0]
+        self.label_len = size[1]
+        self.pred_len = size[2]
+        
+        self.data = data
+        self.__read_data__()
+        
+    def __read_data__(self):
+        self.data_x = torch.Tensor(np.array(self.data))
+        self.data_y = torch.Tensor(np.array(self.data))
+
+    def __getitem__(self, index):
+        s_begin = index
+        s_end = s_begin + self.seq_len
+        r_begin = s_end - self.label_len
+        r_end = r_begin + self.label_len + self.pred_len
+
+        seq_x = self.data_x[s_begin:s_end]
+        seq_y = self.data_y[r_begin:r_end]
+        #seq_x_mark = self.data_stamp[s_begin:s_end]
+        #seq_y_mark = self.data_stamp[r_begin:r_end]
+
+        return seq_x, seq_y #, seq_x_mark, seq_y_mark
+
+    def __len__(self):
+        return len(self.data_x) - self.seq_len - self.pred_len + 1
 
 
 class Dataset_ETT_hour(Dataset):
